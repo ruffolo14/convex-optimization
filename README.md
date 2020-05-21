@@ -3,9 +3,14 @@ Este repositório contém alguns dos principais programas que construi durante m
 
 O primeiro programa encontra do número de Lovasz para um grafo de 8 vértices.
 
+## onecolor_graphs
 Dentro do diretório onecolor_graphs/ncpol2sdpa/ encontra-se um programa para determinar o número de Lovasz de qualquer ciclo de uma cor, chamado ncpol_lovasz_ciclos.py. Este programa também retorna os projetores de medição como matrizes, em um dicionário cuja as entradas são 'monomio':matrix. 
 
-Algumas funções foram definidas para auxiliar na execução das tarefas.
+Algumas funções foram definidas para auxiliar na execução das tarefas. Estas estão descritas na seção funções.
+
+## multicolor_graphs
+Neste diretório, encontra-se um programa para determinar o número de multilovasz para um multigrafo colorido, neste caso, aquele que representa o cenário CHSH em multigrafos.
+
 ## funções
 **decompose_gram_vectors(matrix, precision, trashold)**: Recebe como entrada *matrix*, uma matriz positiva-semidefinida e retorna como saida uma lista dos vetores de Gram associados a essa matriz. *precision*  um inteiro que define quantas casas decimais consideramos nos vetores de saída. *trashold* é um float que define abaixo de qual valor as entradas são definidas como nulas. 
 
