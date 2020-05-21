@@ -7,7 +7,7 @@ Dentro do diretório onecolor_graphs/ncpol2sdpa/ encontra-se um programa para de
 
 Algumas funções foram definidas para auxiliar na execução das tarefas.
 ## funções
-**decompose_gram_vectors(matrix, precision, trashold)**: Recebe como entrada *matrix*, uma matriz positiva-semidefinida e retorna como saida uma lista dos vetores de Gram associados a essa matriz. *precision*  um inteiro que define quantas casas decimais consideramos nos vetores de saída. *trashold* é um float que define abaixo de qual valor as entradas são definidas como nulas. 
+**decompose_gram_vectors(matrix**: Recebe como entrada *matrix*, uma matriz positiva-semidefinida e retorna como saida uma lista dos vetores de Gram associados a essa matriz.
 
 **get_orthogonal_span(list_vectors)**: Recebe como entrada *list_vectors*, uma lista de vetores quaisquer e retorna uma lista de vetores ortogonais entre si que geram o mesmo subspaço vetorial da lista de entrada (processo de Gram-Schmidt).
 
