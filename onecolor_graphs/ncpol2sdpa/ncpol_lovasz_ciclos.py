@@ -17,7 +17,7 @@ def get_monomial_indexes(dic):
 
     indices = {}    #Dicionario        
     for vertex in range(n_vertices):
-        indices['A'+str(vertex)] = [vertex+1] #Isso e uma lista vazia para cada key de indices. 'A'+'B' concatena strings
+        indices['A'+str(vertex)] = [vertex+1] #Isso e uma lista para cada key de indices. 'A'+'B' concatena strings
         for key in monomials_indexes.keys():
             padrao_encontrado = re.match(str(A[vertex])+r'(.+)', key,flags=0) #compara as keys com 'A[vertex]'+'qualquer string' 
             if padrao_encontrado and monomials_indexes[padrao_encontrado.group()] > n_vertices:  #re.match retorna type True se deu match
@@ -73,13 +73,19 @@ for vertex in range(n_vertices):
 
 ## construindo os projetores como matrizes em dicionario monomios:matrizes
 dic_monomials_matrices = {}
-from functions import get_orthogonal_span
-for key in dic_monomials_vectors:
-    span_vectors = get_orthogonal_span(dic_monomials_vectors[key])
-    matrix = sum([np.tensordot(vector,vector, axes=0) for vector in span_vectors])
-    dic_monomials_matrices[key] = matrix
 
-print(dic_monomials_matrices)
+if level == 1:
+    for key in dic_monomials_vectors.keys():
+        normal_vector = dic_monomials_vectors[key]/ np.linalg.norm(dic_monomials_vectors[key])
+        matrix = np.outer(normal_vector,normal_vector)
+        dic_monomials_matrices[key] = matrix
+
+else:
+    from functions import get_orthogonal_span
+    for key in dic_monomials_vectors.keys():
+        span_vectors = get_orthogonal_span(dic_monomials_vectors[key])
+        matrix = sum([np.outer(vector,vector) for vector in span_vectors])
+        dic_monomials_matrices[key] = matrix
 
 
 

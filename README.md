@@ -16,7 +16,4 @@ Neste diretório, encontra-se um programa para determinar o número de multilova
 
 **get_orthogonal_span(list_vectors)**: Recebe como entrada *list_vectors*, uma lista de vetores quaisquer e retorna uma lista de vetores ortogonais entre si que geram o mesmo subspaço vetorial da lista de entrada (processo de Gram-Schmidt).
 
-**get_projection(vector_1,vector_2)**: Recebe dois vetores de entrada e retorna a projeção de *vector_2* em *vector_1*.
-
-**normalize(vector)**: Recebe um vetor *vector* de entrada e devolve um vetor normalizado na mesma direção e sentido.
 
