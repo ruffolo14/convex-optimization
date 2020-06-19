@@ -39,3 +39,21 @@ def get_orthogonal_span(list_vectors):
     for column in range(len(list_vectors)):
         orthogonal.append(orthogonal_matrix[:,column])
     return orthogonal
+
+
+'''
+A função a seguir recebe uma matrix nxn de rank r e a projeta em um espaço de dimensão r
+resultando em uma matrix rxr
+'''
+def project_eff_dim(matrix):
+    # matrix é a matriz de entrada, nxn
+    # dim é a dimensão n da matriz de entrada nxn
+    # rank é o rank de matrix
+    dim = matrix.shape[0]
+    rank = np.linalg.matrix_rank(matrix)
+    v = np.identity(dim)
+    w = np.identity(rank)
+    projector = sum([np.outer(w[i],v[i]) for i in range(rank)])
+    new_matrix = projector@matrix@projector.transpose()
+
+    return new_matrix

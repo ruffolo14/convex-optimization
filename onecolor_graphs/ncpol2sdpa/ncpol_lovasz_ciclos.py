@@ -44,7 +44,6 @@ for i in range(n_vertices):
             substitutions.update({A[i]*A[j]:0})
             substitutions.update({A[j]*A[i]:0})
 
-
 ## funcao objetiva
 objective_function = -sum([A[i] for i in range(n_vertices)])
 ## relaxacao
@@ -70,7 +69,6 @@ for vertex in range(n_vertices):
     for linha in indices['A'+str(vertex)]:
         dic_monomials_vectors['A'+str(vertex)].append(Gram[linha]) 
 
-
 ## construindo os projetores como matrizes em dicionario monomios:matrizes
 dic_monomials_matrices = {}
 
@@ -87,5 +85,14 @@ else:
         matrix = sum([np.outer(vector,vector) for vector in span_vectors])
         dic_monomials_matrices[key] = matrix
 
+##-------------------------Dimensão efetiva das matrizes--------------------------------
+'''
+Mapeamos os projetores de medição no subspaço de dim(rank)
+'''
+for key in dic_monomials_matrices:
+    matrix = dic_monomials_matrices[key]
+    from functions import project_eff_dim
+    new_matrix = project_eff_dim(matrix)
+    dic_monomials_matrices[key] = new_matrix
 
-
+print(dic_monomials_matrices)
