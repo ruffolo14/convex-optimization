@@ -69,30 +69,38 @@ for vertex in range(n_vertices):
     for linha in indices['A'+str(vertex)]:
         dic_monomials_vectors['A'+str(vertex)].append(Gram[linha]) 
 
-## construindo os projetores como matrizes em dicionario monomios:matrizes
-dic_monomials_matrices = {}
 
-if level == 1:
-    for key in dic_monomials_vectors.keys():
-        normal_vector = dic_monomials_vectors[key]/ np.linalg.norm(dic_monomials_vectors[key])
-        matrix = np.outer(normal_vector,normal_vector)
-        dic_monomials_matrices[key] = matrix
+# ## construindo os projetores como matrizes em dicionario monomios:matrizes
+# dic_monomials_matrices = {}
 
-else:
-    from functions import get_orthogonal_span
-    for key in dic_monomials_vectors.keys():
-        span_vectors = get_orthogonal_span(dic_monomials_vectors[key])
-        matrix = sum([np.outer(vector,vector) for vector in span_vectors])
-        dic_monomials_matrices[key] = matrix
+# if level == 1:
+#     for key in dic_monomials_vectors.keys():
+#         normal_vector = dic_monomials_vectors[key]/ np.linalg.norm(dic_monomials_vectors[key])
+#         matrix = np.outer(normal_vector,normal_vector)
+#         dic_monomials_matrices[key] = matrix
 
-##-------------------------Dimensão efetiva das matrizes--------------------------------
-'''
-Mapeamos os projetores de medição no subspaço de dim(rank)
-'''
-for key in dic_monomials_matrices:
-    matrix = dic_monomials_matrices[key]
-    from functions import project_eff_dim
-    new_matrix = project_eff_dim(matrix)
-    dic_monomials_matrices[key] = new_matrix
+# else:
+#     from functions import get_orthogonal_span
+#     for key in dic_monomials_vectors.keys():
+#         dic_monomials_matrices[key] = get_orthogonal_span(dic_monomials_vectors[key])
 
-print(dic_monomials_matrices)
+# # matrix = sum([dic_monomials_matrices[key] for key in dic_monomials_matrices.keys()])
+# # val, vec = np.linalg.eigh(matrix)
+# # print(val)
+# matrix = dic_monomials_matrices['A4']
+list_vectors = dic_monomials_vectors['A4']
+matrix = 0
+for vector in list_vectors:
+    normal_vector = vector / np.linalg.norm(vector)
+    projector = np.outer(normal_vector,normal_vector)
+    matrix = matrix + projector
+
+eigenvalue, eigenvector = np.linalg.eigh(matrix)
+
+## descartando autovalores proximos de zero
+mask = np.isclose(eigenvalue,np.zeros(eigenvalue.shape))
+eigenvalue = np.delete(eigenvalue, np.where(mask))
+# matrix = sum([eigenvalue[i]*np.outer(eigenvector[i],eigenvector[i])/(np.linalg.norm(eigenvector[i])**2) for i in range(eigenvalue.shape[0])])
+print(eigenvalue)
+# print(np.linalg.matrix_rank(matrix))
+

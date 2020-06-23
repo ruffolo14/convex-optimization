@@ -21,39 +21,21 @@ def decompose_gram_vectors(matrix):
     return Gram
 
 '''
-Este programa realiza a ortogonalizacao de Gram-Schmidt para
-uma lista de arrays
+Essa função obtém o projetor associado a um subspaço gerado por uma lista de vetores
 '''
-
 def get_orthogonal_span(list_vectors):
     # list_vectors e uma lista de arrays
-    column_list = []
+    matrix = 0
     for vector in list_vectors:
-        new_vector = np.reshape(vector, (-1,1))
-        column_list.append(new_vector)
+        normal_vector = vector / np.linalg.norm(vector)
+        projector = np.outer(normal_vector,normal_vector)
+        matrix = matrix + projector
 
-    matrix = np.hstack(column_list)
-    from scipy.linalg import qr
-    orthogonal_matrix, triangular = qr(matrix)
-    orthogonal = []
-    for column in range(len(list_vectors)):
-        orthogonal.append(orthogonal_matrix[:,column])
-    return orthogonal
+    eigenvalue, eigenvector = np.linalg.eigh(matrix)
+    ## descartando autovalores proximos de zero
+    mask = np.isclose(eigenvalue,np.zeros(eigenvalue.shape),atol = 1e-1)
+    eigenvalue = np.delete(eigenvalue, np.where(mask))
 
+    matrix = sum([eigenvalue[i]*np.outer(eigenvector[i],eigenvector[i])/(np.linalg.norm(eigenvector[i])**2) for i in range(eigenvalue.shape[0])])
 
-'''
-A função a seguir recebe uma matrix nxn de rank r e a projeta em um espaço de dimensão r
-resultando em uma matrix rxr
-'''
-def project_eff_dim(matrix):
-    # matrix é a matriz de entrada, nxn
-    # dim é a dimensão n da matriz de entrada nxn
-    # rank é o rank de matrix
-    dim = matrix.shape[0]
-    rank = np.linalg.matrix_rank(matrix)
-    v = np.identity(dim)
-    w = np.identity(rank)
-    projector = sum([np.outer(w[i],v[i]) for i in range(rank)])
-    new_matrix = projector@matrix@projector.transpose()
-
-    return new_matrix
+    return matrix
