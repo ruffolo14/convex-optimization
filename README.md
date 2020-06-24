@@ -14,6 +14,5 @@ Neste diretório, encontra-se um programa para determinar o número de multilova
 ## funções
 **decompose_gram_vectors(matrix**: Recebe como entrada *matrix*, uma matriz positiva-semidefinida e retorna como saida uma lista dos vetores de Gram associados a essa matriz.
 
-**get_orthogonal_span(list_vectors)**: Recebe como entrada *list_vectors*, uma lista de vetores quaisquer e retorna uma lista de vetores ortogonais entre si que geram o mesmo subspaço vetorial da lista de entrada (processo de Gram-Schmidt).
-
+**get_orthogonal_span(list_vectors)**: Recebe como entrada *list_vectors*, uma lista de vetores quaisquer e retorna um projetor associado ao subspaço vetorial gerado por *list_vectors*.
 
