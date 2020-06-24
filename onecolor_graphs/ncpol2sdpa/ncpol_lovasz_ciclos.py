@@ -25,8 +25,8 @@ def get_monomial_indexes(dic):
 
     return indices
 #----------------------------------------Resolvendo a SDP-----------------------------------
-level = 2   # lvl da hierarquia NPA
-n_vertices = 5 # numero de vertices do grafo associado ao cenario 
+level = 2  # lvl da hierarquia NPA
+n_vertices = 7 # numero de vertices do grafo associado ao cenario 
 ## edges
 edges = []
 for vertex in range(n_vertices):
@@ -47,7 +47,7 @@ for i in range(n_vertices):
 ## funcao objetiva
 objective_function = -sum([A[i] for i in range(n_vertices)])
 ## relaxacao
-sdp = SdpRelaxation(A)
+sdp = SdpRelaxation(A, verbose = 1)
 sdp.get_relaxation(level, objective = objective_function, substitutions = substitutions)
 sdp.solve('mosek')
 print('O numero de Lovasz:',-sdp.primal,'\n')
@@ -70,37 +70,13 @@ for vertex in range(n_vertices):
         dic_monomials_vectors['A'+str(vertex)].append(Gram[linha]) 
 
 
-# ## construindo os projetores como matrizes em dicionario monomios:matrizes
-# dic_monomials_matrices = {}
+## construindo os projetores como matrizes e alocando em uma lista
+A = []
+from functions import get_orthogonal_span
+for key in dic_monomials_vectors.keys():
+    A.append(get_orthogonal_span(dic_monomials_vectors[key]))
 
-# if level == 1:
-#     for key in dic_monomials_vectors.keys():
-#         normal_vector = dic_monomials_vectors[key]/ np.linalg.norm(dic_monomials_vectors[key])
-#         matrix = np.outer(normal_vector,normal_vector)
-#         dic_monomials_matrices[key] = matrix
+print(A)
 
-# else:
-#     from functions import get_orthogonal_span
-#     for key in dic_monomials_vectors.keys():
-#         dic_monomials_matrices[key] = get_orthogonal_span(dic_monomials_vectors[key])
 
-# # matrix = sum([dic_monomials_matrices[key] for key in dic_monomials_matrices.keys()])
-# # val, vec = np.linalg.eigh(matrix)
-# # print(val)
-# matrix = dic_monomials_matrices['A4']
-list_vectors = dic_monomials_vectors['A4']
-matrix = 0
-for vector in list_vectors:
-    normal_vector = vector / np.linalg.norm(vector)
-    projector = np.outer(normal_vector,normal_vector)
-    matrix = matrix + projector
-
-eigenvalue, eigenvector = np.linalg.eigh(matrix)
-
-## descartando autovalores proximos de zero
-mask = np.isclose(eigenvalue,np.zeros(eigenvalue.shape))
-eigenvalue = np.delete(eigenvalue, np.where(mask))
-# matrix = sum([eigenvalue[i]*np.outer(eigenvector[i],eigenvector[i])/(np.linalg.norm(eigenvector[i])**2) for i in range(eigenvalue.shape[0])])
-print(eigenvalue)
-# print(np.linalg.matrix_rank(matrix))
 
