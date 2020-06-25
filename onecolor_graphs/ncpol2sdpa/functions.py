@@ -7,7 +7,7 @@ a uma matriz positiva-semidefinida
 def decompose_gram_vectors(matrix):
     val, vec = np.linalg.eigh(matrix)
     ## zero autovalores proximos de zero
-    val[abs(val)<1e-1] = 0
+    val[abs(val)<5e-1] = 0
     ## apago os autovetores associados a autovalores nulos e os autovalores nulos
     vec = np.delete(vec, np.where(val == 0), axis = 1)
     val = np.delete(val, np.where(val == 0))
@@ -35,7 +35,7 @@ def get_orthogonal_span(list_vectors):
 
     ## construindo projetor associado ao maior autovalor
     val, vec = np.linalg.eigh(matrix)
-    val[abs(val)<1e-1] = 0
+    val[abs(val)<5e-1] = 0
     vec = np.delete(vec, np.where(val == 0), axis = 1)
     projector = vec@vec.transpose()
         

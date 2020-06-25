@@ -116,22 +116,31 @@ from functions import decompose_gram_vectors
 Gram = decompose_gram_vectors(moment_matrix)
 
 ## Construindo o dicionario de vetores para cada monomio
-dic_monomials_vectors = {}
+Alice_monomials_vectors = {}
+Bob_monomials_vectors = {}
 for vertex in range(n_vertices):
-    dic_monomials_vectors['A'+str(vertex)] =[]
-    dic_monomials_vectors['B'+str(vertex)] = []
+    Alice_monomials_vectors['A'+str(vertex)] = []
+    Bob_monomials_vectors['B'+str(vertex)] = []
     for linha in A_indices['A'+str(vertex)]:
-        dic_monomials_vectors['A'+str(vertex)].append(Gram[linha])
+        Alice_monomials_vectors['A'+str(vertex)].append(Gram[linha])
 
     for linha in B_indices['B'+str(vertex)]:
-        dic_monomials_vectors['B'+str(vertex)].append(Gram[linha])
+        Bob_monomials_vectors['B'+str(vertex)].append(Gram[linha])
 
-## Construindo o dicionario de matrizes para cada monomio
-dic_monomials_matrices = {}
+## Construindo os projetores de medicao
+A = []
+B = []
 from functions import get_orthogonal_span
-for key in dic_monomials_vectors:
-    span_vectors = get_orthogonal_span(dic_monomials_vectors[key])
-    matrix = sum([np.tensordot(vector,vector, axes=0) for vector in span_vectors])
-    dic_monomials_matrices[key] = matrix
+for key in Alice_monomials_vectors:
+    A.append(get_orthogonal_span(Alice_monomials_vectors[key]))
 
-print(dic_monomials_matrices)
+for key in Bob_monomials_vectors:
+    B.append(get_orthogonal_span(Bob_monomials_vectors[key]))
+
+matrix = sum([A[i]@B[i] for i in range(len(A))])
+val, vec = np.linalg.eigh(matrix)
+
+## estado quantico
+handle = Gram[0] / np.linalg.norm(Gram[0])
+density_matrix = np.outer(handle.transpose(), handle)
+print(density_matrix)

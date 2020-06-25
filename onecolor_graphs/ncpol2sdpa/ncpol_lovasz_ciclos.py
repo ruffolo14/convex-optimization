@@ -25,8 +25,8 @@ def get_monomial_indexes(dic):
 
     return indices
 #----------------------------------------Resolvendo a SDP-----------------------------------
-level = 2  # lvl da hierarquia NPA
-n_vertices = 7 # numero de vertices do grafo associado ao cenario 
+level = 1  # lvl da hierarquia NPA
+n_vertices = 5 # numero de vertices do grafo associado ao cenario 
 ## edges
 edges = []
 for vertex in range(n_vertices):
@@ -47,13 +47,12 @@ for i in range(n_vertices):
 ## funcao objetiva
 objective_function = -sum([A[i] for i in range(n_vertices)])
 ## relaxacao
-sdp = SdpRelaxation(A, verbose = 1)
+sdp = SdpRelaxation(A)
 sdp.get_relaxation(level, objective = objective_function, substitutions = substitutions)
 sdp.solve('mosek')
 print('O numero de Lovasz:',-sdp.primal,'\n')
 print('seu valor dual:',-sdp.dual,'\n')
 print('status do problema:', sdp.status)
-
 #-------------------------------Extracao dos projetores de medicao-----------------------
 ## indices dos monomios
 variables_indexes = sdp.monomial_index
@@ -69,14 +68,14 @@ for vertex in range(n_vertices):
     for linha in indices['A'+str(vertex)]:
         dic_monomials_vectors['A'+str(vertex)].append(Gram[linha]) 
 
-
 ## construindo os projetores como matrizes e alocando em uma lista
 A = []
 from functions import get_orthogonal_span
 for key in dic_monomials_vectors.keys():
     A.append(get_orthogonal_span(dic_monomials_vectors[key]))
 
-print(A)
-
+## estado quantico
+handle = Gram[0] / np.linalg.norm(Gram[0])
+density_matrix = np.outer(handle.transpose(), handle)
 
 
