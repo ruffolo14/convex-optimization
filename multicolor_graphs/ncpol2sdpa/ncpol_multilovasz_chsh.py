@@ -143,4 +143,6 @@ val, vec = np.linalg.eigh(matrix)
 ## estado quantico
 handle = Gram[0] / np.linalg.norm(Gram[0])
 density_matrix = np.outer(handle.transpose(), handle)
-print(density_matrix)
+
+A = np.round(A,2)
+print(A)

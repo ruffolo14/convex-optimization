@@ -25,7 +25,7 @@ def get_monomial_indexes(dic):
 
     return indices
 #----------------------------------------Resolvendo a SDP-----------------------------------
-level = 1  # lvl da hierarquia NPA
+level = 3  # lvl da hierarquia NPA
 n_vertices = 5 # numero de vertices do grafo associado ao cenario 
 ## edges
 edges = []
@@ -49,7 +49,7 @@ objective_function = -sum([A[i] for i in range(n_vertices)])
 ## relaxacao
 sdp = SdpRelaxation(A)
 sdp.get_relaxation(level, objective = objective_function, substitutions = substitutions)
-sdp.solve('mosek')
+sdp.solve(solver='mosek', solverparameters={'mosek.dparam.intpnt_co_tol_rel_gap':1e-18})
 print('O numero de Lovasz:',-sdp.primal,'\n')
 print('seu valor dual:',-sdp.dual,'\n')
 print('status do problema:', sdp.status)
@@ -59,6 +59,7 @@ variables_indexes = sdp.monomial_index
 indices = get_monomial_indexes(variables_indexes)
 ## vetores de Gram da matriz de momentos
 moment_matrix = sdp.x_mat[0]
+val, vec = np.linalg.eigh(moment_matrix)
 from functions import decompose_gram_vectors
 Gram = decompose_gram_vectors(moment_matrix)
 ## dicionario com monomio:vetores
