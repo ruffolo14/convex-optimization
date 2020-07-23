@@ -25,7 +25,7 @@ def get_monomial_indexes(dic):
 
     return indices
 #----------------------------------------Resolvendo a SDP-----------------------------------
-level = 3  # lvl da hierarquia NPA
+level = 2  # lvl da hierarquia NPA
 n_vertices = 5 # numero de vertices do grafo associado ao cenario 
 ## edges
 edges = []
@@ -79,4 +79,5 @@ for key in dic_monomials_vectors.keys():
 handle = Gram[0] / np.linalg.norm(Gram[0])
 density_matrix = np.outer(handle.transpose(), handle)
 
-
+dual_matrix = sdp.y_mat[0]
+print(dual_matrix.shape)
